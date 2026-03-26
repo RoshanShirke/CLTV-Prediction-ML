@@ -24,3 +24,18 @@ Identify high-value customers using their data and policy information.
 
 ## 💼 Author
 Roshan Shirke
+
+## 🏆 Achievement
+
+- Ranked **Top 100 (#64)** in Analytics Vidhya Data Scientist Hiring Hackathon  
+- Successfully crossed benchmark R² score requirement  
+- Built an end-to-end ML pipeline from scratch  
+
+---
+
+## 🚀 Highlights
+
+- Solved real-world business problem (CLTV prediction)  
+- Applied feature engineering techniques for performance improvement  
+- Used XGBoost with tuning for better generalization  
+- Demonstrated ability to debug and improve model iteratively  
