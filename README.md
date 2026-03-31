@@ -76,3 +76,8 @@ CLTV-Prediction-ML/
 ## 💼 Author
 
 **Roshan Shirke**
+
+---
+
+## 🌐 Live Demo
+👉 https://cltv-prediction-ml.streamlit.app
