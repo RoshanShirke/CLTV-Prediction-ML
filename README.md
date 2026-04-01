@@ -3,6 +3,9 @@
 ## 📌 Overview
 This project focuses on predicting Customer Lifetime Value (CLTV) using machine learning techniques. The goal is to identify high-value customers based on demographic and policy-related data to support better business decisions.
 
+## 🌐 Live Demo
+👉 https://cltv-prediction-ml.streamlit.app
+
 ---
 
 ## 🎯 Problem Statement
@@ -76,8 +79,3 @@ CLTV-Prediction-ML/
 ## 💼 Author
 
 **Roshan Shirke**
-
----
-
-## 🌐 Live Demo
-👉 https://cltv-prediction-ml.streamlit.app

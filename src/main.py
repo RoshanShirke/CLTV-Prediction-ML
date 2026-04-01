@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-RUN_CV = True   # Change to False before final submission
+RUN_CV = True   # Turn OFF before final submission
 
 # ====== LOAD DATA ======
 train = pd.read_csv("../data/train.csv")
@@ -11,11 +11,9 @@ test_ids = test['id']
 
 # ====== BASIC CONVERSIONS ======
 
-# num_policies
 train['num_policies'] = train['num_policies'].replace({'More than 1': 2}).astype(int)
 test['num_policies'] = test['num_policies'].replace({'More than 1': 2}).astype(int)
 
-# income mapping
 income_map = {
     '0-5L': 1,
     '5L-10L': 2,
@@ -25,6 +23,7 @@ train['income'] = train['income'].map(income_map)
 test['income'] = test['income'].map(income_map)
 
 # ====== FEATURE ENGINEERING ======
+
 train['income_per_policy'] = train['income'] / (train['num_policies'] + 1)
 test['income_per_policy'] = test['income'] / (test['num_policies'] + 1)
 
@@ -40,12 +39,6 @@ test['income_x_claim'] = test['income'] * test['claim_amount']
 train['log_claim'] = np.log1p(train['claim_amount'])
 test['log_claim'] = np.log1p(test['claim_amount'])
 
-train['policy_intensity'] = train['num_policies'] * train['vintage']
-test['policy_intensity'] = test['num_policies'] * test['vintage']
-
-train['interaction_1'] = train['claim_amount'] * train['vintage']
-test['interaction_1'] = test['claim_amount'] * test['vintage']
-
 train['claim_to_income'] = train['claim_amount'] / (train['income'] + 1)
 test['claim_to_income'] = test['claim_amount'] / (test['income'] + 1)
 
@@ -53,20 +46,24 @@ train['claim_per_year'] = train['claim_amount'] / (train['vintage'] + 1)
 test['claim_per_year'] = test['claim_amount'] / (test['vintage'] + 1)
 
 # ====== ONE HOT ENCODING ======
+
 combined = pd.concat([train.drop('cltv', axis=1), test], axis=0)
 combined = pd.get_dummies(combined, drop_first=True)
 
-train_encoded = combined.iloc[:len(train), :]
-test_encoded = combined.iloc[len(train):, :]
+train_encoded = combined.iloc[:len(train), :].copy()
+test_encoded = combined.iloc[len(train):, :].copy()
 
 train_encoded['cltv'] = train['cltv'].values
 
 # ====== PREPARE DATA ======
-X = train_encoded.drop(['id', 'cltv'], axis=1)
-y = train_encoded['cltv']
 
-# ====== MODEL ======
+X = train_encoded.drop(['id', 'cltv'], axis=1)
+y = train_encoded['cltv']   # ❗ NO LOG TRANSFORM
+
+# ====== MODELS ======
+
 from xgboost import XGBRegressor
+from sklearn.ensemble import RandomForestRegressor
 
 model = XGBRegressor(
     n_estimators=1100,
@@ -80,8 +77,6 @@ model = XGBRegressor(
     n_jobs=-1
 )
 
-from sklearn.ensemble import RandomForestRegressor
-
 model2 = RandomForestRegressor(
     n_estimators=200,
     max_depth=10,
@@ -89,7 +84,8 @@ model2 = RandomForestRegressor(
     n_jobs=-1
 )
 
-# ====== CROSS VALIDATION (OPTIONAL) ======
+# ====== CROSS VALIDATION ======
+
 if RUN_CV:
     from sklearn.model_selection import KFold
     from sklearn.metrics import r2_score
@@ -114,11 +110,14 @@ if RUN_CV:
 
     print("\nCross Validation R2 Scores:", scores)
     print("Mean R2 Score:", np.mean(scores))
+
 # ====== FINAL TRAIN ======
+
 model.fit(X, y)
 model2.fit(X, y)
 
-# ====== PREDICT ======
+# ====== TEST PREDICTION ======
+
 test_data = test_encoded.drop('id', axis=1)
 
 pred1 = model.predict(test_data)
@@ -126,10 +125,11 @@ pred2 = model2.predict(test_data)
 
 predictions = (0.7 * pred1) + (0.3 * pred2)
 
-# 🔥 IMPORTANT: CLIP
-predictions = np.clip(predictions, 30000, 650000)
+# 🔥 SMART CLIPPING
+predictions = np.clip(predictions, 25000, 650000)
 
 # ====== SUBMISSION ======
+
 submission = pd.DataFrame({
     'id': test_ids,
     'cltv': predictions
