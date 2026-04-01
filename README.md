@@ -1,7 +1,10 @@
-# 🚀 Customer Lifetime Value Prediction (ML Project)
+# 🚀 Customer Lifetime Value Prediction (ML + Streamlit)
 
 ## 📌 Overview
-This project focuses on predicting Customer Lifetime Value (CLTV) using machine learning techniques. The goal is to identify high-value customers based on demographic and policy-related data to support better business decisions.
+This project predicts Customer Lifetime Value (CLTV) using machine learning on structured customer and policy data.  
+The goal is to help businesses identify high-value customers and optimize marketing, retention, and resource allocation strategies.
+
+---
 
 ## 🌐 Live Demo
 👉 https://cltv-prediction-ml.streamlit.app
@@ -9,73 +12,134 @@ This project focuses on predicting Customer Lifetime Value (CLTV) using machine 
 ---
 
 ## 🎯 Problem Statement
-Predict the CLTV of customers using structured data such as income, policy details, and claim history.
+Customer Lifetime Value (CLTV) is a critical metric for business growth.  
+This project aims to predict CLTV using customer demographics, policy information, and claim history.
 
 ---
 
 ## 🧠 Approach
 
-- Performed data preprocessing and cleaning
-- Applied feature engineering:
-  - Ratio features (income per policy, claim per policy)
-  - Interaction features (income × claim, claim × vintage)
-  - Log transformation for skewed data
-- Used One-Hot Encoding for categorical variables
-- Built an XGBoost regression model
-- Implemented Cross Validation to ensure generalization
-- Applied Ensemble Learning (XGBoost + RandomForest)
-- Optimized predictions using weighted averaging and clipping
+### 🔹 Data Processing
+- Handled categorical + numerical features
+- Mapped ordinal variables (income, policies)
+- No missing values in dataset
+
+### 🔹 Feature Engineering (Key Highlight 🔥)
+- Ratio Features:
+  - income_per_policy
+  - claim_per_policy
+  - claim_to_income
+  - claim_per_year
+- Interaction Features:
+  - income × claim
+- Behavioral Features:
+  - policy_per_year
+- Log Transformation:
+  - log_claim
+
+👉 Feature engineering significantly improved model performance.
+
+---
+
+### 🔹 Encoding
+- Applied One-Hot Encoding (`pd.get_dummies(drop_first=True)`)
+
+---
+
+### 🔹 Models Used
+
+#### 1. XGBoost Regressor
+- Tuned hyperparameters for stability and performance
+
+#### 2. Random Forest Regressor
+- Used as a secondary model for ensemble
+
+---
+
+### 🔥 Ensemble Strategy
+Final prediction: (0.7 * XGBoost) + (0.3 * RandomForest)
+
+
+---
+
+### 🔻 Prediction Optimization
+- Applied clipping to control extreme values:np.clip(predictions, 25000, 650000)
 
 ---
 
 ## 📊 Results
 
-- **R² Score:** 0.155+
+- **R² Score:** ~0.157
 - **Leaderboard Rank:** Top 100 (#64)
-- Achieved stable performance across validation and leaderboard
+- Stable performance across validation and leaderboard
 
 ---
 
-## 🛠️ Tech Stack
+## 🖥️ Streamlit App Features
+
+- 📊 Real-time CLTV prediction
+- 🎛️ Interactive sidebar inputs
+- 📈 Visual charts (CLTV + comparison)
+- 🔍 Feature importance (model explainability)
+- 🧾 Customer input summary
+
+---
+
+## ⚙️ Tech Stack
 
 - Python
 - Pandas, NumPy
 - Scikit-learn
 - XGBoost
+- Streamlit
+- Matplotlib
+- Joblib
 
 ---
 
 ## 📁 Project Structure
 CLTV-Prediction-ML/
 │
-├── data/ # Dataset (ignored in repo)
-├── src/ # Source code
-│ └── main.py
-├── submission/ # Final submission file
+├── models/ # Saved ML models
+├── src/
+│ ├── main.py # Model training
+│ └── app.py # Streamlit app
+├── submission/
 │ └── submission.csv
+├── requirements.txt
 ├── README.md
 ├── .gitignore
 
 
 ---
 
-## 🏆 Achievement
+## 🏆 Achievements
 
-- Ranked **Top 100 (#64)** in Analytics Vidhya Data Scientist Hiring Hackathon
-- Improved model performance through iterative experimentation
-- Built a complete ML pipeline from scratch
+- 🥇 Ranked **Top 100 (#64)** in Analytics Vidhya Hackathon
+- Built end-to-end ML pipeline from scratch
+- Successfully deployed ML model as a web application
 
 ---
 
 ## 🚀 Highlights
 
-- Solved a real-world business problem (CLTV prediction)
-- Applied advanced feature engineering techniques
-- Used ensemble learning to improve model stability
-- Demonstrated iterative model improvement and debugging
+- End-to-end ML pipeline (data → model → deployment)
+- Strong feature engineering impact
+- Ensemble learning for improved performance
+- Real-time prediction dashboard
+- Production-ready project structure
 
 ---
 
-## 💼 Author
+## ▶️ How to Run Locally
 
-**Roshan Shirke**
+```bash
+pip install -r requirements.txt
+streamlit run src/app.py
+
+💼 Author
+
+Roshan Shirke
+📍 Pune, India
+🔗 GitHub: https://github.com/RoshanShirke
+🔗 LinkedIn: https://www.linkedin.com/in/roshan-shirke-527089306

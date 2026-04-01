@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-RUN_CV = True   # Turn OFF before final submission
+RUN_CV = False   # Turn OFF before final submission
 
 # ====== LOAD DATA ======
 train = pd.read_csv("../data/train.csv")
@@ -138,3 +138,18 @@ submission = pd.DataFrame({
 submission.to_csv("../submission/submission.csv", index=False)
 
 print("\nSubmission file created successfully ✅")
+
+import joblib
+import os
+
+# Create models folder if not exists
+os.makedirs("../models", exist_ok=True)
+
+# Save models
+joblib.dump(model, "../models/xgb_model.pkl")
+joblib.dump(model2, "../models/rf_model.pkl")
+
+# Save column structure
+joblib.dump(X.columns, "../models/columns.pkl")
+
+print("✅ Models saved successfully")
