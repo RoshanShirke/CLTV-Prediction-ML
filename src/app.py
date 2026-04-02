@@ -5,7 +5,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # ===== LOAD MODELS =====
-xgb_model = joblib.load("../models/xgb_model.pkl")
+import os
+import joblib
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "..", "models", "xgb_model.pkl")
+
+xgb_model = joblib.load(model_path)
 rf_model = joblib.load("../models/rf_model.pkl")
 model_columns = joblib.load("../models/columns.pkl")
 
