@@ -3,17 +3,18 @@ import numpy as np
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 # ===== LOAD MODELS =====
-import os
-import joblib
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(BASE_DIR, "..", "models", "xgb_model.pkl")
 
-xgb_model = joblib.load(model_path)
-rf_model = joblib.load("../models/rf_model.pkl")
-model_columns = joblib.load("../models/columns.pkl")
+xgb_model_path = os.path.join(BASE_DIR, "..", "models", "xgb_model.pkl")
+rf_model_path = os.path.join(BASE_DIR, "..", "models", "rf_model.pkl")
+columns_path = os.path.join(BASE_DIR, "..", "models", "columns.pkl")
+
+xgb_model = joblib.load(xgb_model_path)
+rf_model = joblib.load(rf_model_path)
+model_columns = joblib.load(columns_path)
 
 # ===== PAGE CONFIG =====
 st.set_page_config(page_title="CLTV Predictor", layout="centered")
