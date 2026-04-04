@@ -134,7 +134,7 @@ if st.button("Predict CLTV"):
     # ===== FEATURE IMPORTANCE =====
     st.markdown("## 🔍 Feature Importance")
 
-    importance = xgb_model.feature_importances_
+    importance = rf_model.feature_importances_
 
     importance_df = pd.DataFrame({
         "Feature": model_columns,
