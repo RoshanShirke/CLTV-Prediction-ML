@@ -12,7 +12,7 @@ xgb_model_path = os.path.join(BASE_DIR, "..", "models", "xgb_model.pkl")
 rf_model_path = os.path.join(BASE_DIR, "..", "models", "rf_model.pkl")
 columns_path = os.path.join(BASE_DIR, "..", "models", "columns.pkl")
 
-xgb_model = joblib.load(xgb_model_path)
+#xgb_model = joblib.load(xgb_model_path)
 rf_model = joblib.load(rf_model_path)
 model_columns = joblib.load(columns_path)
 
@@ -83,13 +83,14 @@ if st.button("Predict CLTV"):
     input_data = input_data.reindex(columns=model_columns, fill_value=0)
 
     # ===== PREDICTION =====
-    pred1 = xgb_model.predict(input_data)
-    pred2 = rf_model.predict(input_data)
+    #pred1 = xgb_model.predict(input_data)
+    #pred2 = rf_model.predict(input_data)
 
-    final_pred = (0.7 * pred1) + (0.3 * pred2)
+    #final_pred = (0.7 * pred1) + (0.3 * pred2)
 
     # ===== CLIPPING =====
-    final_pred = np.clip(final_pred, 25000, 650000)
+    #final_pred = np.clip(final_pred, 25000, 650000)
+    final_pred = rf_model.predict(input_data)
 
     # ===== OUTPUT =====
     st.markdown("## 📊 Prediction Result")
