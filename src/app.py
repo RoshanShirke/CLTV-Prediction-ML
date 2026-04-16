@@ -1,3 +1,14 @@
+st.set_page_config(
+    page_title="CLTV Predictor",
+    page_icon="💰",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Show this while model loads
+with st.spinner("🚀 Loading model... please wait a moment"):
+    rf_model, model_columns = load_model()
+    
 import streamlit as st
 import numpy as np
 import joblib
@@ -12,9 +23,17 @@ xgb_model_path = os.path.join(BASE_DIR, "..", "models", "xgb_model.pkl")
 rf_model_path = os.path.join(BASE_DIR, "..", "models", "rf_model.pkl")
 columns_path = os.path.join(BASE_DIR, "..", "models", "columns.pkl")
 
-#xgb_model = joblib.load(xgb_model_path)
-rf_model = joblib.load(rf_model_path)
-model_columns = joblib.load(columns_path)
+# ✅ FIXED (loads once, cached forever)
+import streamlit as st
+
+@st.cache_resource
+def load_model():
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    rf_model = joblib.load(os.path.join(BASE_DIR, "../models/rf_model.pkl"))
+    model_columns = joblib.load(os.path.join(BASE_DIR, "../models/columns.pkl"))
+    return rf_model, model_columns
+
+rf_model, model_columns = load_model()
 
 # ===== PAGE CONFIG =====
 st.set_page_config(page_title="CLTV Predictor", layout="centered")
